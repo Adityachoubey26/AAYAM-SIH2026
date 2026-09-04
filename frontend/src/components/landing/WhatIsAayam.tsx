@@ -84,88 +84,77 @@ export const WhatIsAayam: React.FC = () => {
           </p>
         </div>
 
-        {/* Visual Pipeline Desktop Flow (Horizontal & Connected) */}
-        <div className="relative">
-          {/* Animated Connecting Trace Line */}
-          <div className="hidden lg:block absolute top-1/2 left-4 right-4 h-0.5 bg-slate-800 -translate-y-6 z-0">
-            <motion.div
-              animate={{
-                x: ['0%', '100%'],
-                opacity: [0.2, 1, 0.2],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="w-32 h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent"
-            />
-          </div>
+        {/* Grid of 6 Pipeline Nodes (Consistent 3-column layout matching Capabilities) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            const isActive = activeStep === index;
 
-          {/* Grid of 6 Pipeline Nodes */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 relative z-10">
-            {steps.map((step, index) => {
-              const Icon = step.icon;
-              const isActive = activeStep === index;
-
-              return (
-                <motion.div
-                  key={step.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.08 }}
-                  onClick={() => setActiveStep(index)}
-                  className={`cursor-pointer rounded-xl p-4 transition-all duration-300 flex flex-col justify-between border ${
-                    isActive
-                      ? 'bg-[#0e1622] border-emerald-500/50 shadow-lg shadow-emerald-950/50 scale-[1.03]'
-                      : 'bg-[#090e15]/90 border-slate-800/80 hover:border-slate-700 hover:bg-[#0c121b]'
-                  }`}
-                >
-                  <div>
-                    {/* Node Header Icon */}
-                    <div className="flex items-center justify-between mb-4">
-                      <div
-                        className={`w-9 h-9 rounded-lg flex items-center justify-center border transition-colors ${
-                          isActive
-                            ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
-                            : 'bg-slate-800/60 border-slate-700/60 text-slate-400'
-                        }`}
-                      >
-                        <Icon className="w-4 h-4" />
-                      </div>
-                      <span className="text-xs font-mono text-slate-500 font-semibold">
-                        0{index + 1}
+            return (
+              <motion.div
+                key={step.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.08 }}
+                onClick={() => setActiveStep(index)}
+                className={`group relative rounded-2xl p-6 sm:p-7 transition-all duration-300 flex flex-col justify-between cursor-pointer border hover:-translate-y-1 shadow-xl hover:shadow-2xl ${
+                  isActive
+                    ? 'bg-gradient-to-b from-[#111c2a] to-[#0c1522] border-emerald-500/60 shadow-emerald-950/50 ring-1 ring-emerald-500/30'
+                    : 'bg-gradient-to-b from-[#0d141e]/90 to-[#080d14]/90 border-slate-800/80 hover:border-slate-700'
+                }`}
+              >
+                <div>
+                  {/* Top Bar with Stage Number, Badge & Icon */}
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono font-bold text-slate-500 tracking-wider">
+                        0{index + 1} //
+                      </span>
+                      <span className="text-xs font-mono text-emerald-400/90 font-medium px-2 py-0.5 rounded bg-emerald-950/50 border border-emerald-500/20">
+                        {step.badge}
                       </span>
                     </div>
-
-                    {/* Step Title (H3) */}
-                    <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 tracking-normal leading-snug flex items-center gap-1">
-                      {step.title}
-                    </h3>
-
-                    {/* Badge */}
-                    <span className="inline-block text-xs font-mono text-emerald-400/90 mb-2">
-                      {step.badge}
-                    </span>
-
-                    {/* Concise Summary */}
-                    <p className="text-sm text-slate-400 font-normal leading-relaxed line-clamp-3">
-                      {step.desc}
-                    </p>
+                    <div
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all ${
+                        isActive
+                          ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
+                          : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 group-hover:border-emerald-500/60'
+                      }`}
+                    >
+                      <Icon className="w-5 h-5" />
+                    </div>
                   </div>
 
-                  {/* Active highlight indicator */}
-                  <div className="pt-3 mt-3 border-t border-slate-800/60 flex items-center justify-between">
-                    <span className="text-xs font-mono text-slate-500 truncate">
-                      {step.metrics}
-                    </span>
-                    <ChevronRight className={`w-3 h-3 transition-transform ${isActive ? 'text-emerald-400 translate-x-0.5' : 'text-slate-600'}`} />
+                  {/* Step Title (H3) */}
+                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2 tracking-normal leading-snug group-hover:text-emerald-300 transition-colors">
+                    {step.title}
+                  </h3>
+
+                  {/* Description (Full text, consistent with website body text) */}
+                  <p className="text-sm text-slate-400 font-normal leading-relaxed">
+                    {step.desc}
+                  </p>
+                </div>
+
+                {/* Footer Tag (Clean, unclipped telemetry stream) */}
+                <div className="pt-5 mt-5 border-t border-slate-800/80 flex items-center justify-between">
+                  <span className="text-xs font-mono text-slate-400">
+                    {step.metrics}
+                  </span>
+                  <div
+                    className={`w-6 h-6 rounded-full flex items-center justify-center border transition-all ${
+                      isActive
+                        ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
+                        : 'bg-slate-900 border-slate-800 text-slate-400 group-hover:text-white group-hover:border-slate-600'
+                    }`}
+                  >
+                    <ChevronRight className="w-3.5 h-3.5" />
                   </div>
-                </motion.div>
-              );
-            })}
-          </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Dynamic Telemetry Inspector Box of Selected Step */}
