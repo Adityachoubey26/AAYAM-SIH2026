@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import AuthLayout from '../layouts/AuthLayout';
 
+import LandingPage from '../pages/landing/LandingPage';
 import Dashboard from '../pages/dashboard/Dashboard';
 import RiskMapPage from '../pages/risk-map/RiskMapPage';
 import HabitationsPage from '../pages/habitations/HabitationsPage';
@@ -21,9 +22,12 @@ export const AppRoutes: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Protected / Platform Main Layout Routes */}
+        {/* Public High-Impact Landing Page */}
+        <Route path="/" element={<LandingPage />} />
+
+        {/* Protected / Authority Command Platform Layout Routes */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/risk-map" element={<RiskMapPage />} />
           <Route path="/habitations" element={<HabitationsPage />} />
           <Route path="/habitations/:id" element={<HabitationDetailsPage />} />
