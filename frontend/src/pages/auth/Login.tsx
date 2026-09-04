@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useSignIn, useAuth } from '@clerk/clerk-react';
 import {
   ShieldCheck,
   Mail,
@@ -11,32 +12,21 @@ import {
   Clock,
   Compass,
   Radio,
+  AlertCircle,
 } from 'lucide-react';
 import logoImg from '../../assets/logo_AAYAM.png';
 import mapBg from '../../assets/login_geospatial_bg.jpg';
+import { ENV } from '../../config/env';
 
 /**
  * AAYAM Authority Portal Login Page UI
- * Pixel-perfect implementation adhering to the official SIH 2026 design reference.
+ * Fully integrated with Clerk authentication while preserving 100% of the visual design.
  */
 export const Login: React.FC = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Simulated visual sign-in interaction
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    localStorage.setItem('aayam_auth_session', 'true');
-    setTimeout(() => {
-      setIsSubmitting(false);
-      navigate('/dashboard');
-    }, 500);
-  };
+  const hasClerkKey = Boolean(
+    ENV.CLERK_PUBLISHABLE_KEY ||
+    (typeof window !== 'undefined' ? localStorage.getItem('aayam_clerk_pk') : '')
+  );
 
   return (
     <div className="min-h-screen bg-[#03060a] text-slate-100 flex flex-col justify-between relative overflow-hidden font-sans selection:bg-emerald-500/30 selection:text-emerald-300">
@@ -221,7 +211,7 @@ export const Login: React.FC = () => {
           </motion.div>
 
           {/* ================================================ */}
-          {/* RIGHT: CLEAN AUTHORITY LOGIN CARD               */}
+          {/* RIGHT: AUTHORITY LOGIN CARD (CLERK CONNECTED)     */}
           {/* ================================================ */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -229,185 +219,7 @@ export const Login: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
             className="lg:col-span-6 xl:col-span-5 flex justify-center lg:justify-end"
           >
-            <div className="w-full max-w-[440px] rounded-3xl bg-[#0a0f16]/90 border border-slate-800/80 hover:border-emerald-500/30 shadow-[0_0_50px_rgba(0,0,0,0.85)] backdrop-blur-xl p-8 sm:p-9 relative overflow-hidden transition-all duration-300 group">
-              
-              {/* Soft Ambient Corner Glow */}
-              <div className="absolute top-0 right-0 w-36 h-36 bg-emerald-500/10 rounded-full blur-[50px] pointer-events-none" />
-
-              {/* Card Header: AUTHORITY ACCESS */}
-              <div className="flex items-center gap-2 text-xs font-mono font-bold tracking-[0.2em] text-emerald-400 uppercase">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>AUTHORITY ACCESS</span>
-              </div>
-
-              {/* Card Title & Subtitle */}
-              <h2 className="text-2xl sm:text-[28px] font-extrabold text-white tracking-tight mt-3">
-                Welcome back
-              </h2>
-              <p className="text-xs sm:text-[13px] text-slate-400 mt-1 font-normal leading-relaxed">
-                Sign in to continue to the AAYAM Authority Portal.
-              </p>
-
-              {/* Login Form */}
-              <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                {/* Email Field */}
-                <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                    Email address
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                      <Mail className="w-4 h-4" />
-                    </div>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email address"
-                      required
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#060a0f]/90 border border-slate-800 text-xs sm:text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500/70 focus:ring-1 focus:ring-emerald-500/40 transition-all font-sans"
-                    />
-                  </div>
-                </div>
-
-                {/* Password Field */}
-                <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                      <Lock className="w-4 h-4" />
-                    </div>
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Enter your password"
-                      required
-                      className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#060a0f]/90 border border-slate-800 text-xs sm:text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500/70 focus:ring-1 focus:ring-emerald-500/40 transition-all font-sans"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 hover:text-slate-300 transition-colors"
-                      aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    >
-                      {showPassword ? (
-                        <EyeOff className="w-4 h-4" />
-                      ) : (
-                        <Eye className="w-4 h-4" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Remember Me & Forgot Password Row */}
-                <div className="flex items-center justify-between pt-0.5 text-xs">
-                  <label className="flex items-center gap-2 cursor-pointer text-slate-300 hover:text-white select-none">
-                    <input
-                      type="checkbox"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
-                      className="w-3.5 h-3.5 rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-0 focus:ring-offset-0 cursor-pointer accent-emerald-500"
-                    />
-                    <span>Remember me</span>
-                  </label>
-
-                  <button
-                    type="button"
-                    onClick={() => alert('Password reset directives have been routed to the SDMA security officer.')}
-                    className="text-emerald-400 hover:text-emerald-300 transition-colors font-medium"
-                  >
-                    Forgot password?
-                  </button>
-                </div>
-
-                {/* Primary Sign In Button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full mt-2 py-3 rounded-xl bg-gradient-to-r from-[#4d864f] to-[#3f7543] hover:from-[#579459] hover:to-[#46824b] text-slate-950 font-bold text-xs sm:text-sm tracking-wide shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-2 transition-all group disabled:opacity-75"
-                >
-                  {isSubmitting ? (
-                    <div className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      <span>Sign In</span>
-                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                    </>
-                  )}
-                </button>
-              </form>
-
-              {/* OR Divider */}
-              <div className="relative flex py-4 items-center">
-                <div className="flex-grow border-t border-slate-800" />
-                <span className="flex-shrink mx-3 text-[10px] font-mono text-slate-500 uppercase tracking-wider">
-                  OR
-                </span>
-                <div className="flex-grow border-t border-slate-800" />
-              </div>
-
-              {/* Social / Identity Sign-In Placeholders */}
-              <div className="space-y-2.5">
-                {/* Google Button */}
-                <button
-                  type="button"
-                  onClick={() => handleSubmit({ preventDefault: () => {} } as any)}
-                  className="w-full py-2.5 px-4 rounded-xl bg-[#060a0f] hover:bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-3 transition-colors shadow-sm"
-                >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24">
-                    <path
-                      fill="#4285F4"
-                      d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"
-                    />
-                    <path
-                      fill="#34A853"
-                      d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"
-                    />
-                    <path
-                      fill="#FBBC05"
-                      d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"
-                    />
-                    <path
-                      fill="#EA4335"
-                      d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.93 6.72-4.93z"
-                    />
-                  </svg>
-                  <span>Continue with Google</span>
-                </button>
-
-                {/* Microsoft Button */}
-                <button
-                  type="button"
-                  onClick={() => handleSubmit({ preventDefault: () => {} } as any)}
-                  className="w-full py-2.5 px-4 rounded-xl bg-[#060a0f] hover:bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-3 transition-colors shadow-sm"
-                >
-                  <svg className="w-4 h-4" viewBox="0 0 21 21">
-                    <path fill="#f25022" d="M1 1h9v9H1z" />
-                    <path fill="#00a4ef" d="M1 11h9v9H1z" />
-                    <path fill="#7fba00" d="M11 1h9v9h-9z" />
-                    <path fill="#ffb900" d="M11 11h9v9h-9z" />
-                  </svg>
-                  <span>Continue with Microsoft</span>
-                </button>
-              </div>
-
-              {/* Request Access Link */}
-              <div className="text-center text-xs mt-6 text-slate-400">
-                <span>New authority user? </span>
-                <button
-                  type="button"
-                  onClick={() => alert('Access request form: Please submit your NDMA/SDMA officer token or district magistrate credentials to support@aayam-disaster.gov.in.')}
-                  className="text-orange-400 hover:text-orange-300 font-semibold inline-flex items-center gap-1 transition-colors"
-                >
-                  <span>Request access</span>
-                  <ArrowRight className="w-3 h-3" />
-                </button>
-              </div>
-
-            </div>
+            {hasClerkKey ? <ClerkAuthCard /> : <DevFallbackCard />}
           </motion.div>
 
         </div>
@@ -448,6 +260,481 @@ export const Login: React.FC = () => {
           </div>
         </div>
       </footer>
+
+    </div>
+  );
+};
+
+/**
+ * Clerk Authenticated Login Card
+ * Uses useSignIn() and useAuth() while strictly retaining the exact UI design
+ */
+const ClerkAuthCard: React.FC = () => {
+  const navigate = useNavigate();
+  const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
+  const { isLoaded, signIn, setActive } = useSignIn();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // If already signed in with Clerk, redirect directly to dashboard
+  useEffect(() => {
+    if (isAuthLoaded && isSignedIn) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthLoaded, isSignedIn, navigate]);
+
+  // Handle Email and Password submission via Clerk
+  const handleEmailPasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isLoaded || !signIn) return;
+    setError(null);
+    setIsSubmitting(true);
+
+    try {
+      const result = await signIn.create({
+        identifier: email.trim(),
+        password: password,
+      });
+
+      if (result.status === 'complete') {
+        await setActive({ session: result.createdSessionId });
+        localStorage.setItem('aayam_auth_session', 'true');
+        navigate('/dashboard');
+      } else {
+        setError(`Additional verification step required: ${result.status}. Please check your email.`);
+      }
+    } catch (err: any) {
+      console.error('Clerk login error:', err);
+      const msg =
+        err.errors?.[0]?.longMessage ||
+        err.errors?.[0]?.message ||
+        'Authentication failed. Please verify your officer credentials.';
+      setError(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Handle Google OAuth via Clerk
+  const handleGoogleSignIn = async () => {
+    if (!isLoaded || !signIn) return;
+    setError(null);
+    try {
+      await signIn.authenticateWithRedirect({
+        strategy: 'oauth_google',
+        redirectUrl: `${window.location.origin}/sso-callback`,
+        redirectUrlComplete: `${window.location.origin}/dashboard`,
+      });
+    } catch (err: any) {
+      console.error('Google OAuth error:', err);
+      setError(err.errors?.[0]?.message || 'Google authentication could not be started.');
+    }
+  };
+
+  // Handle Microsoft OAuth via Clerk
+  const handleMicrosoftSignIn = async () => {
+    if (!isLoaded || !signIn) return;
+    setError(null);
+    try {
+      await signIn.authenticateWithRedirect({
+        strategy: 'oauth_microsoft',
+        redirectUrl: `${window.location.origin}/sso-callback`,
+        redirectUrlComplete: `${window.location.origin}/dashboard`,
+      });
+    } catch (err: any) {
+      console.error('Microsoft OAuth error:', err);
+      setError(err.errors?.[0]?.message || 'Microsoft authentication could not be started.');
+    }
+  };
+
+  return (
+    <div className="w-full max-w-[440px] rounded-3xl bg-[#0a0f16]/90 border border-slate-800/80 hover:border-emerald-500/30 shadow-[0_0_50px_rgba(0,0,0,0.85)] backdrop-blur-xl p-8 sm:p-9 relative overflow-hidden transition-all duration-300 group">
+      
+      {/* Soft Ambient Corner Glow */}
+      <div className="absolute top-0 right-0 w-36 h-36 bg-emerald-500/10 rounded-full blur-[50px] pointer-events-none" />
+
+      {/* Card Header: AUTHORITY ACCESS */}
+      <div className="flex items-center gap-2 text-xs font-mono font-bold tracking-[0.2em] text-emerald-400 uppercase">
+        <ShieldCheck className="w-4 h-4 text-emerald-400" />
+        <span>AUTHORITY ACCESS</span>
+      </div>
+
+      {/* Card Title & Subtitle */}
+      <h2 className="text-2xl sm:text-[28px] font-extrabold text-white tracking-tight mt-3">
+        Welcome back
+      </h2>
+      <p className="text-xs sm:text-[13px] text-slate-400 mt-1 font-normal leading-relaxed">
+        Sign in to continue to the AAYAM Authority Portal.
+      </p>
+
+      {/* Error Alert Display */}
+      {error && (
+        <div className="mt-4 p-3 rounded-xl bg-red-950/40 border border-red-500/30 text-red-300 text-xs font-mono flex items-start gap-2 animate-fadeIn">
+          <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+          <span className="leading-snug">{error}</span>
+        </div>
+      )}
+
+      {/* Login Form */}
+      <form onSubmit={handleEmailPasswordSubmit} className="mt-6 space-y-4">
+        {/* Email Field */}
+        <div>
+          <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            Email address
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <Mail className="w-4 h-4" />
+            </div>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email address"
+              required
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#060a0f]/90 border border-slate-800 text-xs sm:text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500/70 focus:ring-1 focus:ring-emerald-500/40 transition-all font-sans"
+            />
+          </div>
+        </div>
+
+        {/* Password Field */}
+        <div>
+          <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            Password
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <Lock className="w-4 h-4" />
+            </div>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
+              className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#060a0f]/90 border border-slate-800 text-xs sm:text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500/70 focus:ring-1 focus:ring-emerald-500/40 transition-all font-sans"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 hover:text-slate-300 transition-colors"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Remember Me & Forgot Password Row */}
+        <div className="flex items-center justify-between pt-0.5 text-xs">
+          <label className="flex items-center gap-2 cursor-pointer text-slate-300 hover:text-white select-none">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="w-3.5 h-3.5 rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-0 focus:ring-offset-0 cursor-pointer accent-emerald-500"
+            />
+            <span>Remember me</span>
+          </label>
+
+          <button
+            type="button"
+            onClick={() => alert('Password reset directions have been routed to your registered SDMA officer email.')}
+            className="text-emerald-400 hover:text-emerald-300 transition-colors font-medium"
+          >
+            Forgot password?
+          </button>
+        </div>
+
+        {/* Primary Sign In Button */}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full mt-2 py-3 rounded-xl bg-gradient-to-r from-[#4d864f] to-[#3f7543] hover:from-[#579459] hover:to-[#46824b] text-slate-950 font-bold text-xs sm:text-sm tracking-wide shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-2 transition-all group disabled:opacity-75"
+        >
+          {isSubmitting ? (
+            <div className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+          ) : (
+            <>
+              <span>Sign In</span>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </>
+          )}
+        </button>
+      </form>
+
+      {/* OR Divider */}
+      <div className="relative flex py-4 items-center">
+        <div className="flex-grow border-t border-slate-800" />
+        <span className="flex-shrink mx-3 text-[10px] font-mono text-slate-500 uppercase tracking-wider">
+          OR
+        </span>
+        <div className="flex-grow border-t border-slate-800" />
+      </div>
+
+      {/* Social / Identity Sign-In Handlers via Clerk */}
+      <div className="space-y-2.5">
+        {/* Google Button */}
+        <button
+          type="button"
+          onClick={handleGoogleSignIn}
+          className="w-full py-2.5 px-4 rounded-xl bg-[#060a0f] hover:bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-3 transition-colors shadow-sm"
+        >
+          <svg className="w-4 h-4" viewBox="0 0 24 24">
+            <path
+              fill="#4285F4"
+              d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"
+            />
+            <path
+              fill="#34A853"
+              d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"
+            />
+            <path
+              fill="#FBBC05"
+              d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"
+            />
+            <path
+              fill="#EA4335"
+              d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.93 6.72-4.93z"
+            />
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+
+        {/* Microsoft Button */}
+        <button
+          type="button"
+          onClick={handleMicrosoftSignIn}
+          className="w-full py-2.5 px-4 rounded-xl bg-[#060a0f] hover:bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-3 transition-colors shadow-sm"
+        >
+          <svg className="w-4 h-4" viewBox="0 0 21 21">
+            <path fill="#f25022" d="M1 1h9v9H1z" />
+            <path fill="#00a4ef" d="M1 11h9v9H1z" />
+            <path fill="#7fba00" d="M11 1h9v9h-9z" />
+            <path fill="#ffb900" d="M11 11h9v9h-9z" />
+          </svg>
+          <span>Continue with Microsoft</span>
+        </button>
+      </div>
+
+      {/* Request Access Link */}
+      <div className="text-center text-xs mt-6 text-slate-400">
+        <span>New authority user? </span>
+        <button
+          type="button"
+          onClick={() => alert('Authority Onboarding: Contact NDMA/SDMA administrator or email support@aayam-disaster.gov.in for role-based credentials.')}
+          className="text-orange-400 hover:text-orange-300 font-semibold inline-flex items-center gap-1 transition-colors"
+        >
+          <span>Request access</span>
+          <ArrowRight className="w-3 h-3" />
+        </button>
+      </div>
+
+    </div>
+  );
+};
+
+/**
+ * Development Fallback Card
+ * Used when no Clerk publishable key is detected in the environment.
+ */
+const DevFallbackCard: React.FC = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    localStorage.setItem('aayam_auth_session', 'true');
+    setTimeout(() => {
+      setIsSubmitting(false);
+      navigate('/dashboard');
+    }, 450);
+  };
+
+  return (
+    <div className="w-full max-w-[440px] rounded-3xl bg-[#0a0f16]/90 border border-slate-800/80 hover:border-emerald-500/30 shadow-[0_0_50px_rgba(0,0,0,0.85)] backdrop-blur-xl p-8 sm:p-9 relative overflow-hidden transition-all duration-300 group">
+      
+      {/* Soft Ambient Corner Glow */}
+      <div className="absolute top-0 right-0 w-36 h-36 bg-emerald-500/10 rounded-full blur-[50px] pointer-events-none" />
+
+      {/* Card Header: AUTHORITY ACCESS */}
+      <div className="flex items-center gap-2 text-xs font-mono font-bold tracking-[0.2em] text-emerald-400 uppercase">
+        <ShieldCheck className="w-4 h-4 text-emerald-400" />
+        <span>AUTHORITY ACCESS</span>
+      </div>
+
+      {/* Card Title & Subtitle */}
+      <h2 className="text-2xl sm:text-[28px] font-extrabold text-white tracking-tight mt-3">
+        Welcome back
+      </h2>
+      <p className="text-xs sm:text-[13px] text-slate-400 mt-1 font-normal leading-relaxed">
+        Sign in to continue to the AAYAM Authority Portal.
+      </p>
+
+      {/* Login Form */}
+      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        {/* Email Field */}
+        <div>
+          <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            Email address
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <Mail className="w-4 h-4" />
+            </div>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email address"
+              required
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#060a0f]/90 border border-slate-800 text-xs sm:text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500/70 focus:ring-1 focus:ring-emerald-500/40 transition-all font-sans"
+            />
+          </div>
+        </div>
+
+        {/* Password Field */}
+        <div>
+          <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            Password
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <Lock className="w-4 h-4" />
+            </div>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
+              className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#060a0f]/90 border border-slate-800 text-xs sm:text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500/70 focus:ring-1 focus:ring-emerald-500/40 transition-all font-sans"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 hover:text-slate-300 transition-colors"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Remember Me & Forgot Password Row */}
+        <div className="flex items-center justify-between pt-0.5 text-xs">
+          <label className="flex items-center gap-2 cursor-pointer text-slate-300 hover:text-white select-none">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="w-3.5 h-3.5 rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-0 focus:ring-offset-0 cursor-pointer accent-emerald-500"
+            />
+            <span>Remember me</span>
+          </label>
+
+          <button
+            type="button"
+            onClick={() => alert('Password reset directives have been routed to the SDMA security officer.')}
+            className="text-emerald-400 hover:text-emerald-300 transition-colors font-medium"
+          >
+            Forgot password?
+          </button>
+        </div>
+
+        {/* Primary Sign In Button */}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full mt-2 py-3 rounded-xl bg-gradient-to-r from-[#4d864f] to-[#3f7543] hover:from-[#579459] hover:to-[#46824b] text-slate-950 font-bold text-xs sm:text-sm tracking-wide shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-2 transition-all group disabled:opacity-75"
+        >
+          {isSubmitting ? (
+            <div className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+          ) : (
+            <>
+              <span>Sign In</span>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </>
+          )}
+        </button>
+      </form>
+
+      {/* OR Divider */}
+      <div className="relative flex py-4 items-center">
+        <div className="flex-grow border-t border-slate-800" />
+        <span className="flex-shrink mx-3 text-[10px] font-mono text-slate-500 uppercase tracking-wider">
+          OR
+        </span>
+        <div className="flex-grow border-t border-slate-800" />
+      </div>
+
+      {/* Social / Identity Sign-In Placeholders */}
+      <div className="space-y-2.5">
+        {/* Google Button */}
+        <button
+          type="button"
+          onClick={() => handleSubmit({ preventDefault: () => {} } as any)}
+          className="w-full py-2.5 px-4 rounded-xl bg-[#060a0f] hover:bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-3 transition-colors shadow-sm"
+        >
+          <svg className="w-4 h-4" viewBox="0 0 24 24">
+            <path
+              fill="#4285F4"
+              d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"
+            />
+            <path
+              fill="#34A853"
+              d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"
+            />
+            <path
+              fill="#FBBC05"
+              d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"
+            />
+            <path
+              fill="#EA4335"
+              d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.93 6.72-4.93z"
+            />
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+
+        {/* Microsoft Button */}
+        <button
+          type="button"
+          onClick={() => handleSubmit({ preventDefault: () => {} } as any)}
+          className="w-full py-2.5 px-4 rounded-xl bg-[#060a0f] hover:bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-3 transition-colors shadow-sm"
+        >
+          <svg className="w-4 h-4" viewBox="0 0 21 21">
+            <path fill="#f25022" d="M1 1h9v9H1z" />
+            <path fill="#00a4ef" d="M1 11h9v9H1z" />
+            <path fill="#7fba00" d="M11 1h9v9h-9z" />
+            <path fill="#ffb900" d="M11 11h9v9h-9z" />
+          </svg>
+          <span>Continue with Microsoft</span>
+        </button>
+      </div>
+
+      {/* Request Access Link */}
+      <div className="text-center text-xs mt-6 text-slate-400">
+        <span>New authority user? </span>
+        <button
+          type="button"
+          onClick={() => alert('Access request form: Please submit your NDMA/SDMA officer token or district magistrate credentials to support@aayam-disaster.gov.in.')}
+          className="text-orange-400 hover:text-orange-300 font-semibold inline-flex items-center gap-1 transition-colors"
+        >
+          <span>Request access</span>
+          <ArrowRight className="w-3 h-3" />
+        </button>
+      </div>
 
     </div>
   );

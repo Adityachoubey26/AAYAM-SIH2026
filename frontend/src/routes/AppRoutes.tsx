@@ -14,6 +14,7 @@ import AIAnalysisPage from '../pages/ai-analysis/AIAnalysisPage';
 import AlertsPage from '../pages/dashboard/AlertsPage';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import Login from '../pages/auth/Login';
+import { AuthenticateWithRedirectCallback } from '@clerk/clerk-react';
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -46,6 +47,15 @@ export const AppRoutes: React.FC = () => {
 
         {/* Authentication Portal */}
         <Route path="/login" element={<Login />} />
+        <Route
+          path="/sso-callback"
+          element={
+            <AuthenticateWithRedirectCallback
+              continueSignUpUrl="/dashboard"
+              afterSignInUrl="/dashboard"
+            />
+          }
+        />
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
