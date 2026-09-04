@@ -110,6 +110,30 @@ class AuthorityRegistryService {
         approvedAt: '2026-01-01T00:00:00Z',
         approvedBy: 'SYSTEM',
       },
+      {
+        id: 'AUTH-TEST-005',
+        email: 'aditya.choubey.soe@gmail.com',
+        fullName: 'Aditya Choubey (Test Authority Lead)',
+        role: 'SUPER_ADMIN',
+        jurisdiction: 'National Disaster Command Center // Uttarakhand Sector',
+        badgeNumber: 'AAYAM-TEST-01',
+        clearanceLevel: 'LEVEL_4',
+        isApproved: true,
+        status: 'ACTIVE',
+        permissions: [
+          'dashboard:view',
+          'risk:view',
+          'risk:manage',
+          'habitations:view',
+          'habitations:manage',
+          'relocation:plan',
+          'relocation:approve',
+          'alerts:broadcast',
+          'users:manage',
+        ],
+        approvedAt: '2026-03-01T00:00:00Z',
+        approvedBy: 'AAYAM_ADMIN_COUNCIL',
+      },
     ];
 
     seedUsers.forEach((user) => {
