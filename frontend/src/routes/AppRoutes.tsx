@@ -1,22 +1,18 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import MainLayout from '../layouts/MainLayout';
-import AuthLayout from '../layouts/AuthLayout';
-
+import DashboardLayout from '../layouts/DashboardLayout';
 import LandingPage from '../pages/landing/LandingPage';
 import Dashboard from '../pages/dashboard/Dashboard';
-import RiskMapPage from '../pages/risk-map/RiskMapPage';
+import RiskIntelligencePage from '../pages/dashboard/RiskIntelligencePage';
 import HabitationsPage from '../pages/habitations/HabitationsPage';
-import HabitationDetailsPage from '../pages/habitations/HabitationDetailsPage';
 import HazardsPage from '../pages/hazards/HazardsPage';
-import HazardDetailsPage from '../pages/hazards/HazardDetailsPage';
-import RelocationSitesPage from '../pages/relocation/RelocationSitesPage';
+import VulnerabilityPage from '../pages/dashboard/VulnerabilityPage';
 import RelocationPlanningPage from '../pages/relocation/RelocationPlanningPage';
+import CapacityPage from '../pages/dashboard/CapacityPage';
 import AIAnalysisPage from '../pages/ai-analysis/AIAnalysisPage';
-import AIRecommendationPage from '../pages/ai-analysis/AIRecommendationPage';
+import AlertsPage from '../pages/dashboard/AlertsPage';
 import Login from '../pages/auth/Login';
-import Unauthorized from '../pages/auth/Unauthorized';
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -25,25 +21,28 @@ export const AppRoutes: React.FC = () => {
         {/* Public High-Impact Landing Page */}
         <Route path="/" element={<LandingPage />} />
 
-        {/* Protected / Authority Command Platform Layout Routes */}
-        <Route element={<MainLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/risk-map" element={<RiskMapPage />} />
-          <Route path="/habitations" element={<HabitationsPage />} />
-          <Route path="/habitations/:id" element={<HabitationDetailsPage />} />
-          <Route path="/hazards" element={<HazardsPage />} />
-          <Route path="/hazards/:id" element={<HazardDetailsPage />} />
-          <Route path="/relocation" element={<RelocationSitesPage />} />
-          <Route path="/relocation/planning" element={<RelocationPlanningPage />} />
-          <Route path="/ai-analysis" element={<AIAnalysisPage />} />
-          <Route path="/ai-analysis/recommendation" element={<AIRecommendationPage />} />
+        {/* Authority Command Platform Routes under DashboardLayout */}
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="risk-intelligence" element={<RiskIntelligencePage />} />
+          <Route path="habitations" element={<HabitationsPage />} />
+          <Route path="hazards" element={<HazardsPage />} />
+          <Route path="vulnerability" element={<VulnerabilityPage />} />
+          <Route path="relocation" element={<RelocationPlanningPage />} />
+          <Route path="capacity" element={<CapacityPage />} />
+          <Route path="ai-analysis" element={<AIAnalysisPage />} />
+          <Route path="alerts" element={<AlertsPage />} />
         </Route>
 
-        {/* Authentication & Access Layout Routes */}
-        <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/unauthorized" element={<Unauthorized />} />
-        </Route>
+        {/* Shorthand / Direct Route Compatibility */}
+        <Route path="/risk-map" element={<Navigate to="/dashboard/risk-intelligence" replace />} />
+        <Route path="/habitations" element={<Navigate to="/dashboard/habitations" replace />} />
+        <Route path="/hazards" element={<Navigate to="/dashboard/hazards" replace />} />
+        <Route path="/relocation" element={<Navigate to="/dashboard/relocation" replace />} />
+        <Route path="/ai-analysis" element={<Navigate to="/dashboard/ai-analysis" replace />} />
+
+        {/* Authentication Portal */}
+        <Route path="/login" element={<Login />} />
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
