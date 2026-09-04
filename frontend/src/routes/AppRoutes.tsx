@@ -12,6 +12,7 @@ import RelocationPlanningPage from '../pages/relocation/RelocationPlanningPage';
 import CapacityPage from '../pages/dashboard/CapacityPage';
 import AIAnalysisPage from '../pages/ai-analysis/AIAnalysisPage';
 import AlertsPage from '../pages/dashboard/AlertsPage';
+import ProtectedRoute from '../components/auth/ProtectedRoute';
 import Login from '../pages/auth/Login';
 
 export const AppRoutes: React.FC = () => {
@@ -21,17 +22,19 @@ export const AppRoutes: React.FC = () => {
         {/* Public High-Impact Landing Page */}
         <Route path="/" element={<LandingPage />} />
 
-        {/* Authority Command Platform Routes under DashboardLayout */}
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="risk-intelligence" element={<RiskIntelligencePage />} />
-          <Route path="habitations" element={<HabitationsPage />} />
-          <Route path="hazards" element={<HazardsPage />} />
-          <Route path="vulnerability" element={<VulnerabilityPage />} />
-          <Route path="relocation" element={<RelocationPlanningPage />} />
-          <Route path="capacity" element={<CapacityPage />} />
-          <Route path="ai-analysis" element={<AIAnalysisPage />} />
-          <Route path="alerts" element={<AlertsPage />} />
+        {/* Protected Authority Command Platform Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="risk-intelligence" element={<RiskIntelligencePage />} />
+            <Route path="habitations" element={<HabitationsPage />} />
+            <Route path="hazards" element={<HazardsPage />} />
+            <Route path="vulnerability" element={<VulnerabilityPage />} />
+            <Route path="relocation" element={<RelocationPlanningPage />} />
+            <Route path="capacity" element={<CapacityPage />} />
+            <Route path="ai-analysis" element={<AIAnalysisPage />} />
+            <Route path="alerts" element={<AlertsPage />} />
+          </Route>
         </Route>
 
         {/* Shorthand / Direct Route Compatibility */}

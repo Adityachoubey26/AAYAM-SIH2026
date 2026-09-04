@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, Search, Bell, MapPin, ChevronDown, CheckCircle2 } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { Menu, Search, Bell, MapPin, ChevronDown, CheckCircle2, LogOut } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useUser, UserButton } from '@clerk/clerk-react';
+import { ENV } from '../../config/env';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -218,21 +220,97 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
             )}
           </div>
 
-          {/* Authority Profile Avatar */}
-          <div className="flex items-center gap-2 pl-1 border-l border-slate-800/80">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-600 to-teal-400 p-0.5 flex items-center justify-center text-slate-950 font-bold text-xs shadow-md">
-              RS
-            </div>
-            <div className="hidden sm:block text-left">
-              <div className="text-xs font-bold text-white leading-tight">R. Sharma</div>
-              <div className="text-[10px] font-mono text-emerald-400 leading-tight">State Authority</div>
-            </div>
-          </div>
+          {/* Authority Profile Control (Clerk / Dev) */}
+          {clerkKey ? <ClerkUserProfileControl /> : <DevUserProfileControl />}
 
         </div>
 
       </div>
     </header>
+  );
+};
+
+const clerkKey =
+  ENV.CLERK_PUBLISHABLE_KEY ||
+  (typeof window !== 'undefined' ? localStorage.getItem('aayam_clerk_pk') : '') ||
+  '';
+
+/**
+ * Official Clerk UserButton & Officer Profile display
+ */
+const ClerkUserProfileControl: React.FC = () => {
+  const { user, isLoaded } = useUser();
+  const displayName = isLoaded && user ? (user.fullName || user.firstName || 'Command Officer') : 'Command Officer';
+  const role = isLoaded && user?.primaryEmailAddress?.emailAddress ? user.primaryEmailAddress.emailAddress : 'SDMA Clearance L-4';
+
+  return (
+    <div className="flex items-center gap-2.5 pl-2 border-l border-slate-800/80">
+      <div className="hidden sm:block text-right">
+        <div className="text-xs font-bold text-white leading-tight truncate max-w-[140px]">{displayName}</div>
+        <div className="text-[10px] font-mono text-emerald-400 leading-tight truncate max-w-[140px]">{role}</div>
+      </div>
+      <div className="clerk-user-button-container">
+        <UserButton
+          afterSignOutUrl="/login"
+          appearance={{
+            elements: {
+              userButtonAvatarBox: 'w-8 h-8 rounded-lg border border-emerald-500/30 shadow-md',
+              userButtonPopoverCard: 'bg-[#090e15] border border-slate-800 shadow-2xl rounded-2xl text-slate-100',
+              userButtonPopoverActionButton: 'text-slate-300 hover:bg-slate-800 hover:text-white',
+              userButtonPopoverActionButtonText: 'text-xs text-slate-200',
+              userButtonPopoverFooter: 'hidden',
+            },
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Local Evaluation Session Profile with Sign Out control
+ */
+const DevUserProfileControl: React.FC = () => {
+  const [profileOpen, setProfileOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    localStorage.removeItem('aayam_auth_session');
+    navigate('/login');
+  };
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setProfileOpen(!profileOpen)}
+        className="flex items-center gap-2 pl-2 border-l border-slate-800/80 hover:opacity-90 transition-opacity"
+        aria-label="Officer profile and sign out menu"
+      >
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-600 to-teal-400 p-0.5 flex items-center justify-center text-slate-950 font-bold text-xs shadow-md">
+          RS
+        </div>
+        <div className="hidden sm:block text-left">
+          <div className="text-xs font-bold text-white leading-tight">R. Sharma</div>
+          <div className="text-[10px] font-mono text-emerald-400 leading-tight">State Authority</div>
+        </div>
+      </button>
+
+      {profileOpen && (
+        <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-[#090e15] border border-slate-800 shadow-2xl p-2 z-50 text-xs font-mono">
+          <div className="px-3 py-2 border-b border-slate-800/80">
+            <div className="font-bold text-white">R. Sharma</div>
+            <div className="text-[10px] text-slate-400">SDMA Officer // Clearance L-4</div>
+          </div>
+          <button
+            onClick={handleSignOut}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-red-400 hover:bg-red-950/30 hover:text-red-300 transition-colors mt-1 text-left font-semibold"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Sign Out Session</span>
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
 

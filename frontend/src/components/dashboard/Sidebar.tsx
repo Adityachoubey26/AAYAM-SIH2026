@@ -1,5 +1,6 @@
 import React from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { useClerk } from '@clerk/clerk-react';
 import {
   LayoutDashboard,
   Activity,
@@ -14,8 +15,10 @@ import {
   Settings,
   LogOut,
   X,
+  Globe,
 } from 'lucide-react';
 import logoImg from '../../assets/logo_AAYAM.png';
+import { ENV } from '../../config/env';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -144,17 +147,72 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <span>Settings</span>
             </button>
 
+            {/* Sign Out Action */}
+            {clerkKey ? <ClerkSidebarSignOut /> : <DevSidebarSignOut />}
+
+            {/* Public Portal Navigation */}
             <Link
               to="/"
-              className="flex items-center gap-2.5 w-full px-3 py-1.5 rounded-lg text-red-400/80 hover:text-red-400 hover:bg-red-950/30 transition-colors text-left"
+              className="flex items-center gap-2.5 w-full px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-slate-900/60 transition-colors text-left text-[11px]"
             >
-              <LogOut className="w-3.5 h-3.5" />
-              <span>Exit to Public Portal</span>
+              <Globe className="w-3.5 h-3.5" />
+              <span>Public Landing Page</span>
             </Link>
           </div>
         </div>
       </aside>
     </>
+  );
+};
+
+const clerkKey =
+  ENV.CLERK_PUBLISHABLE_KEY ||
+  (typeof window !== 'undefined' ? localStorage.getItem('aayam_clerk_pk') : '') ||
+  '';
+
+/**
+ * Clerk Sign Out Button
+ */
+const ClerkSidebarSignOut: React.FC = () => {
+  const { signOut } = useClerk();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    localStorage.removeItem('aayam_auth_session');
+    await signOut();
+    navigate('/login');
+  };
+
+  return (
+    <button
+      onClick={handleSignOut}
+      className="flex items-center gap-2.5 w-full px-3 py-1.5 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-950/30 transition-colors text-left font-medium"
+    >
+      <LogOut className="w-3.5 h-3.5" />
+      <span>Sign Out Session</span>
+    </button>
+  );
+};
+
+/**
+ * Dev Session Sign Out Button
+ */
+const DevSidebarSignOut: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    localStorage.removeItem('aayam_auth_session');
+    navigate('/login');
+  };
+
+  return (
+    <button
+      onClick={handleSignOut}
+      className="flex items-center gap-2.5 w-full px-3 py-1.5 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-950/30 transition-colors text-left font-medium"
+    >
+      <LogOut className="w-3.5 h-3.5" />
+      <span>Sign Out Session</span>
+    </button>
   );
 };
 

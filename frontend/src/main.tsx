@@ -22,7 +22,10 @@ const queryClient = new QueryClient({
   },
 });
 
-const clerkPublishableKey = ENV.CLERK_PUBLISHABLE_KEY;
+const clerkPublishableKey =
+  ENV.CLERK_PUBLISHABLE_KEY ||
+  (typeof window !== 'undefined' ? localStorage.getItem('aayam_clerk_pk') : '') ||
+  '';
 
 const RootApp: React.FC = () => {
   const content = (
@@ -34,7 +37,20 @@ const RootApp: React.FC = () => {
   // If Clerk publishable key is configured, wrap with ClerkProvider
   if (clerkPublishableKey) {
     return (
-      <ClerkProvider publishableKey={clerkPublishableKey}>
+      <ClerkProvider
+        publishableKey={clerkPublishableKey}
+        appearance={{
+          variables: {
+            colorPrimary: '#10b981',
+            colorBackground: '#090e15',
+            colorInputBackground: '#060a0f',
+            colorInputText: '#f8fafc',
+            colorText: '#f1f5f9',
+            colorTextSecondary: '#94a3b8',
+            borderRadius: '0.75rem',
+          },
+        }}
+      >
         {content}
       </ClerkProvider>
     );
