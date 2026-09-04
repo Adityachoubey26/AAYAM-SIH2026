@@ -25,19 +25,19 @@ export const AuthorityCTA: React.FC = () => {
 
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 mb-6">
             <Shield className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-300 font-semibold">
+            <span className="text-xs font-mono uppercase tracking-widest text-emerald-300 font-medium">
               Restricted Authority Access
             </span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight max-w-2xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-[1.2] max-w-2xl mx-auto">
             Built for the People Who Make{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200">
               Critical Decisions.
             </span>
           </h2>
 
-          <p className="mt-5 text-base sm:text-lg text-slate-300 max-w-xl mx-auto leading-relaxed">
+          <p className="mt-5 text-base sm:text-lg text-slate-300 max-w-xl mx-auto font-normal leading-relaxed">
             AAYAM provides disaster management authorities with a centralized intelligence layer for understanding risk, vulnerability, and safer relocation possibilities.
           </p>
 

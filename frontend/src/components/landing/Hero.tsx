@@ -45,13 +45,13 @@ export const Hero: React.FC = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
-              <span className="text-[11px] font-mono tracking-widest uppercase text-emerald-300 font-semibold">
+              <span className="text-xs font-mono tracking-widest uppercase text-emerald-300 font-medium">
                 Smart India Hackathon 2026 • SIH26191
               </span>
             </div>
 
-            {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.12]">
+            {/* Main Headline (H1) */}
+            <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold text-white tracking-tight leading-[1.15]">
               AI-Powered <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200 drop-shadow-[0_0_25px_rgba(16,185,129,0.35)]">
                 Disaster Intelligence
@@ -59,7 +59,7 @@ export const Hero: React.FC = () => {
               for a Safer Tomorrow
             </h1>
 
-            {/* Supporting Text */}
+            {/* Supporting Body Text */}
             <p className="text-base sm:text-lg text-slate-300/90 max-w-xl font-normal leading-relaxed">
               AAYAM helps authorities identify disaster-prone and vulnerable habitations, assess risk using AI and geospatial intelligence, and plan safer, smarter relocation.
             </p>

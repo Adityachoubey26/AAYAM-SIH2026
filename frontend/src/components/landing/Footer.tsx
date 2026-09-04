@@ -37,9 +37,9 @@ export const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div className="md:col-span-3 space-y-3">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-slate-200 font-bold">
+            <div className="text-xs font-mono uppercase tracking-widest text-slate-200 font-bold">
               Navigation
-            </h4>
+            </div>
             <ul className="space-y-2 text-slate-400">
               <li><a href="#hero" className="hover:text-emerald-400 transition-colors">Home</a></li>
               <li><a href="#about" className="hover:text-emerald-400 transition-colors">About AAYAM</a></li>
@@ -52,9 +52,9 @@ export const Footer: React.FC = () => {
 
           {/* Authority Access & Hackathon Context */}
           <div className="md:col-span-4 space-y-3">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-slate-200 font-bold">
+            <div className="text-xs font-mono uppercase tracking-widest text-slate-200 font-bold">
               Disaster Operations Portal
-            </h4>
+            </div>
             <p className="text-xs text-slate-400 leading-relaxed">
               Designated portal for district collectors, NDMA officers, and state disaster mitigation teams.
             </p>

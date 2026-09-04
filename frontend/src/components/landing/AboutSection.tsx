@@ -28,13 +28,13 @@ export const AboutSection: React.FC = () => {
             </div>
 
             <div className="space-y-1">
-              <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest font-semibold">
+              <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest font-medium">
                 Six Perspectives • One Solution
               </span>
-              <h3 className="text-xl font-bold text-white">
+              <h3 className="text-lg sm:text-xl font-bold text-white tracking-normal leading-snug">
                 The AAYAM Philosophy
               </h3>
-              <p className="text-xs text-slate-400 max-w-sm">
+              <p className="text-sm text-slate-400 max-w-sm font-normal leading-relaxed">
                 A multidimensional paradigm integrating environmental science, demographics, and high-performance geospatial algorithms.
               </p>
             </div>
@@ -44,23 +44,23 @@ export const AboutSection: React.FC = () => {
           <div className="lg:col-span-7 space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 border border-slate-800">
               <Compass className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-[11px] font-mono uppercase tracking-widest text-slate-300 font-semibold">
+              <span className="text-xs font-mono uppercase tracking-widest text-slate-300 font-medium">
                 About The Platform
               </span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-[1.2]">
               Unifying Disaster Intelligence <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200">
                 Into a Single Command Layer
               </span>
             </h2>
 
-            <p className="text-base text-slate-300 leading-relaxed font-normal">
+            <p className="text-base sm:text-lg text-slate-300 font-normal leading-relaxed">
               AAYAM is engineered for the <strong className="text-white">Smart India Hackathon 2026 (Problem Statement: SIH26191)</strong> to address a persistent crisis in fragile topographies: disaster authorities lack a synchronized system that pairs real-time hazard detection with community vulnerability and verified safe-haven carrying capacities.
             </p>
 
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <p className="text-base text-slate-400 font-normal leading-relaxed">
               By consolidating satellite GIS layers, demographic vulnerability indexes, environmental carrying capacity audits, and transparent AI reasoning into one authoritative portal, AAYAM empowers decision-makers to move from reactive crisis management to proactive life-saving prevention.
             </p>
 
@@ -70,8 +70,8 @@ export const AboutSection: React.FC = () => {
                 <div key={pillar.label} className="p-3 rounded-xl bg-[#090e15] border border-slate-800/80 flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="text-xs font-bold text-white">{pillar.label}</h4>
-                    <p className="text-[11px] text-slate-400 leading-tight mt-0.5">{pillar.desc}</p>
+                    <div className="text-sm font-bold text-white tracking-wide">{pillar.label}</div>
+                    <p className="text-xs text-slate-400 leading-relaxed mt-0.5">{pillar.desc}</p>
                   </div>
                 </div>
               ))}

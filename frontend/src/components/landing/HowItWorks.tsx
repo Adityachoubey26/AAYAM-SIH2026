@@ -56,19 +56,19 @@ export const HowItWorks: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-20">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/40 border border-emerald-500/25 mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-300 font-semibold">
+            <span className="text-xs font-mono uppercase tracking-widest text-emerald-300 font-medium">
               Operational Workflow
             </span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-[1.2]">
             How AAYAM Operates <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200">
               In High-Stakes Scenarios
             </span>
           </h2>
 
-          <p className="mt-4 text-base sm:text-lg text-slate-400 font-normal">
+          <p className="mt-4 text-base sm:text-lg text-slate-400 font-normal leading-relaxed">
             A battle-tested 5-stage progression from raw spatial feeds to finalized disaster-mitigation authority orders.
           </p>
         </div>
@@ -114,21 +114,21 @@ export const HowItWorks: React.FC = () => {
                   >
                     <Icon className="w-6 h-6" />
                     {/* Badge count */}
-                    <div className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-slate-900 border border-slate-700 text-[9px] font-mono text-slate-300">
+                    <div className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-slate-900 border border-slate-700 text-[10px] font-mono text-slate-300">
                       {step.num}
                     </div>
                   </div>
 
-                  {/* Title & Subtitle */}
-                  <h3 className="text-lg font-bold text-white mb-1 tracking-wide group-hover:text-emerald-300 transition-colors">
+                  {/* Title (H3) & Subtitle */}
+                  <h3 className="text-lg sm:text-xl font-bold text-white mb-1 tracking-normal leading-snug group-hover:text-emerald-300 transition-colors">
                     {step.title}
                   </h3>
-                  <div className="text-[11px] font-mono text-emerald-400/90 mb-3 font-medium">
+                  <div className="text-xs font-mono text-emerald-400/90 mb-3 font-medium">
                     {step.subtitle}
                   </div>
 
                   {/* Description */}
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <p className="text-sm text-slate-400 font-normal leading-relaxed">
                     {step.desc}
                   </p>
                 </motion.div>

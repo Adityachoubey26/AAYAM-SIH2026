@@ -14,19 +14,19 @@ export const GeospatialPreview: React.FC = () => {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800 mb-4">
               <Map className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-[11px] font-mono uppercase tracking-widest text-slate-300 font-semibold">
+              <span className="text-xs font-mono uppercase tracking-widest text-slate-300 font-medium">
                 Geospatial Command Map
               </span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-[1.2]">
               Tactical Zonal <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200">
                 Threat & Relocation Mapping
               </span>
             </h2>
 
-            <p className="mt-3 text-base text-slate-400 max-w-xl font-normal">
+            <p className="mt-4 text-base sm:text-lg text-slate-400 max-w-xl font-normal leading-relaxed">
               High-resolution disaster intelligence overlay identifying active hazard perimeters, vulnerable communities, and viable relocation corridors.
             </p>
           </div>

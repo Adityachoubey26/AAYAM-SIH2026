@@ -65,19 +65,19 @@ export const Capabilities: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 border border-slate-800 mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-orange-400" />
-            <span className="text-[11px] font-mono uppercase tracking-widest text-slate-300 font-semibold">
+            <span className="text-xs font-mono uppercase tracking-widest text-slate-300 font-medium">
               Platform Architecture
             </span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-[1.2]">
             Comprehensive Disaster <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200">
               Intelligence Capabilities
             </span>
           </h2>
 
-          <p className="mt-4 text-base sm:text-lg text-slate-400 font-normal">
+          <p className="mt-4 text-base sm:text-lg text-slate-400 font-normal leading-relaxed">
             Equipping district magistrates, disaster mitigation cells, and state authorities with decisive tactical capabilities.
           </p>
         </div>
@@ -123,18 +123,18 @@ export const Capabilities: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Title & Description */}
-                  <h3 className="text-lg font-bold text-white mb-2.5 tracking-wide group-hover:text-emerald-300 transition-colors">
+                  {/* Title (H3) & Description */}
+                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2 tracking-normal leading-snug group-hover:text-emerald-300 transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">
+                  <p className="text-sm text-slate-400 font-normal leading-relaxed">
                     {item.desc}
                   </p>
                 </div>
 
                 {/* Footer Tag */}
                 <div className="pt-5 mt-5 border-t border-slate-800/80 flex items-center justify-between">
-                  <span className="text-[11px] font-mono text-slate-400">
+                  <span className="text-xs font-mono text-slate-400">
                     {item.tag}
                   </span>
                   <div className="w-5 h-5 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center group-hover:border-slate-600 transition-colors">

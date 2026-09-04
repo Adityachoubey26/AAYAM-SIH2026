@@ -67,19 +67,19 @@ export const WhatIsAayam: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/40 border border-emerald-500/25 mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-300 font-semibold">
+            <span className="text-xs font-mono uppercase tracking-widest text-emerald-300 font-medium">
               The Intelligence Pipeline
             </span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-[1.2]">
             From Risk Detection to <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200">
               Safer Decisions.
             </span>
           </h2>
 
-          <p className="mt-4 text-base sm:text-lg text-slate-400 font-normal">
+          <p className="mt-4 text-base sm:text-lg text-slate-400 font-normal leading-relaxed">
             A continuous analytical pipeline transforming raw geospatial layers and census demographics into definitive authority action plans.
           </p>
         </div>
@@ -134,30 +134,30 @@ export const WhatIsAayam: React.FC = () => {
                       >
                         <Icon className="w-4 h-4" />
                       </div>
-                      <span className="text-[10px] font-mono text-slate-500 font-semibold">
+                      <span className="text-xs font-mono text-slate-500 font-semibold">
                         0{index + 1}
                       </span>
                     </div>
 
-                    {/* Step Title */}
-                    <h3 className="text-sm font-bold text-white mb-1.5 flex items-center gap-1">
+                    {/* Step Title (H3) */}
+                    <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 tracking-normal leading-snug flex items-center gap-1">
                       {step.title}
                     </h3>
 
                     {/* Badge */}
-                    <span className="inline-block text-[10px] font-mono text-emerald-400/90 mb-2">
+                    <span className="inline-block text-xs font-mono text-emerald-400/90 mb-2">
                       {step.badge}
                     </span>
 
                     {/* Concise Summary */}
-                    <p className="text-xs text-slate-400 leading-normal line-clamp-3">
+                    <p className="text-sm text-slate-400 font-normal leading-relaxed line-clamp-3">
                       {step.desc}
                     </p>
                   </div>
 
                   {/* Active highlight indicator */}
                   <div className="pt-3 mt-3 border-t border-slate-800/60 flex items-center justify-between">
-                    <span className="text-[9px] font-mono text-slate-500 truncate">
+                    <span className="text-xs font-mono text-slate-500 truncate">
                       {step.metrics}
                     </span>
                     <ChevronRight className={`w-3 h-3 transition-transform ${isActive ? 'text-emerald-400 translate-x-0.5' : 'text-slate-600'}`} />
@@ -176,9 +176,9 @@ export const WhatIsAayam: React.FC = () => {
               <p className="text-xs font-mono uppercase tracking-wider text-slate-400">
                 Pipeline Stage 0{activeStep + 1} Selected
               </p>
-              <h4 className="text-base font-bold text-white">
+              <div className="text-base sm:text-lg font-bold text-white">
                 {steps[activeStep].title}: <span className="text-slate-300 font-normal">{steps[activeStep].desc}</span>
-              </h4>
+              </div>
             </div>
           </div>
 

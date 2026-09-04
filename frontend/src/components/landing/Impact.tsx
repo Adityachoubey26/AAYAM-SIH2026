@@ -44,19 +44,19 @@ export const Impact: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/40 border border-emerald-500/25 mb-4">
             <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-300 font-semibold">
+            <span className="text-xs font-mono uppercase tracking-widest text-emerald-300 font-medium">
               Operational Outcomes
             </span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-[1.2]">
             Turning Intelligence <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200">
               Into Defisive Action.
             </span>
           </h2>
 
-          <p className="mt-4 text-base sm:text-lg text-slate-400 font-normal">
+          <p className="mt-4 text-base sm:text-lg text-slate-400 font-normal leading-relaxed">
             AAYAM provides administrative authorities with the analytical clarity required to act proactively before disasters unfold.
           </p>
         </div>
@@ -80,15 +80,16 @@ export const Impact: React.FC = () => {
                     <Icon className="w-6 h-6" />
                   </div>
 
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 font-semibold mb-1">
+                  <div className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-medium mb-1">
                     {item.highlight}
                   </div>
 
-                  <h3 className="text-lg font-bold text-white mb-2.5 tracking-wide">
+                  {/* Title (H3) */}
+                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2 tracking-normal leading-snug">
                     {item.title}
                   </h3>
 
-                  <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                  <p className="text-sm text-slate-400 font-normal leading-relaxed mb-4">
                     {item.desc}
                   </p>
                 </div>

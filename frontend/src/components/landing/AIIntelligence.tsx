@@ -24,19 +24,19 @@ export const AIIntelligence: React.FC = () => {
           <div className="lg:col-span-5 space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800">
               <Cpu className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-[11px] font-mono uppercase tracking-widest text-slate-300 font-semibold">
+              <span className="text-xs font-mono uppercase tracking-widest text-slate-300 font-medium">
                 Transparent Decision Engine
               </span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-[1.2]">
               AI That Explains <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200">
                 The Exact Risk.
               </span>
             </h2>
 
-            <p className="text-base text-slate-400 leading-relaxed font-normal">
+            <p className="text-base sm:text-lg text-slate-400 font-normal leading-relaxed">
               Not a chatbot. AAYAM employs geospatial deep-reasoning models designed specifically for emergency authorities, providing transparent, auditable explanations behind every risk score and relocation directive.
             </p>
 
@@ -76,10 +76,10 @@ export const AIIntelligence: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-500/30 text-emerald-300">
+                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-500/30 text-emerald-300">
                     TELEMETRY: LIVE
                   </span>
-                  <span className="text-[10px] font-mono text-slate-500">LAT: 42ms</span>
+                  <span className="text-xs font-mono text-slate-500">LAT: 42ms</span>
                 </div>
               </div>
 
@@ -88,10 +88,10 @@ export const AIIntelligence: React.FC = () => {
                 {/* Sector & Assessment Banner */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 border-b border-slate-800/80">
                   <div>
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-semibold">
+                    <span className="text-xs font-mono uppercase tracking-widest text-slate-400 font-medium">
                       Target Habitation Sector
                     </span>
-                    <h3 className="text-xl font-bold text-white mt-0.5 flex items-center gap-2">
+                    <h3 className="text-lg sm:text-xl font-bold text-white mt-0.5 flex items-center gap-2 tracking-normal leading-snug">
                       Himalayan Valley Sector 7A
                       <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-normal">
                         Chamoli Basin
@@ -101,7 +101,7 @@ export const AIIntelligence: React.FC = () => {
 
                   <div className="flex items-center gap-3">
                     <div className="text-right">
-                      <div className="text-[10px] font-mono uppercase text-slate-400">Risk Score</div>
+                      <div className="text-xs font-mono uppercase text-slate-400">Risk Score</div>
                       <div className="text-2xl font-mono font-extrabold text-red-400">87 / 100</div>
                     </div>
                     <div className="px-3 py-1.5 rounded-lg bg-red-950/70 border border-red-500/50 text-red-300 font-mono text-xs font-bold animate-pulse">
@@ -112,10 +112,10 @@ export const AIIntelligence: React.FC = () => {
 
                 {/* Key Contributing Risk Factors */}
                 <div>
-                  <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
+                  <div className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2 font-medium">
                     <Activity className="w-3.5 h-3.5 text-orange-400" />
                     Key Risk Drivers Identified by AI
-                  </h4>
+                  </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="p-3 rounded-xl bg-[#0d141e] border border-slate-800/80">
@@ -167,7 +167,7 @@ export const AIIntelligence: React.FC = () => {
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                       Recommended Action Directive
                     </span>
-                    <span className="text-[10px] font-mono text-emerald-400/90 font-semibold px-2 py-0.5 bg-emerald-900/40 rounded">
+                    <span className="text-xs font-mono text-emerald-400/90 font-medium px-2 py-0.5 bg-emerald-900/40 rounded">
                       TIMEFRAME: &lt; 72 HOURS
                     </span>
                   </div>
