@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useSignIn, useAuth } from '@clerk/clerk-react';
+import { useSignIn, useAuth, useUser } from '@clerk/clerk-react';
 import {
   ShieldCheck,
   Mail,
@@ -17,6 +17,7 @@ import {
 import logoImg from '../../assets/logo_AAYAM.png';
 import mapBg from '../../assets/login_geospatial_bg.jpg';
 import { ENV } from '../../config/env';
+import { authorityService } from '../../services/authorityService';
 
 /**
  * AAYAM Authority Portal Login Page UI
@@ -272,6 +273,7 @@ export const Login: React.FC = () => {
 const ClerkAuthCard: React.FC = () => {
   const navigate = useNavigate();
   const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
+  const { user } = useUser();
   const { isLoaded, signIn, setActive } = useSignIn();
 
   const [email, setEmail] = useState('');
@@ -281,12 +283,22 @@ const ClerkAuthCard: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // If already signed in with Clerk, redirect directly to dashboard
+  // If already signed in with Clerk, check backend authorization before redirecting
   useEffect(() => {
     if (isAuthLoaded && isSignedIn) {
-      navigate('/dashboard', { replace: true });
+      const email = user?.primaryEmailAddress?.emailAddress;
+      if (email) {
+        authorityService.verifyAuthority(email).then((res) => {
+          if (res.authorized) {
+            navigate('/dashboard', { replace: true });
+          } else {
+            sessionStorage.setItem('aayam_attempted_email', email);
+            navigate('/access-restricted', { replace: true });
+          }
+        });
+      }
     }
-  }, [isAuthLoaded, isSignedIn, navigate]);
+  }, [isAuthLoaded, isSignedIn, user, navigate]);
 
   // Handle Email and Password submission via Clerk
   const handleEmailPasswordSubmit = async (e: React.FormEvent) => {
@@ -303,8 +315,16 @@ const ClerkAuthCard: React.FC = () => {
 
       if (result.status === 'complete') {
         await setActive({ session: result.createdSessionId });
-        localStorage.setItem('aayam_auth_session', 'true');
-        navigate('/dashboard');
+        
+        // Enforce Server-Side Authority Authorization
+        const authz = await authorityService.verifyAuthority(email.trim());
+        if (authz.authorized) {
+          localStorage.setItem('aayam_auth_session', 'true');
+          navigate('/dashboard');
+        } else {
+          sessionStorage.setItem('aayam_attempted_email', email.trim());
+          navigate('/access-restricted');
+        }
       } else {
         setError(`Additional verification step required: ${result.status}. Please check your email.`);
       }
@@ -550,15 +570,31 @@ const DevFallbackCard: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    localStorage.setItem('aayam_auth_session', 'true');
-    setTimeout(() => {
+    setError(null);
+
+    const inputEmail = email.trim() || 'officer.command@sdma.gov.in';
+
+    try {
+      const authz = await authorityService.verifyAuthority(inputEmail);
       setIsSubmitting(false);
-      navigate('/dashboard');
-    }, 450);
+
+      if (authz.authorized) {
+        localStorage.setItem('aayam_auth_session', 'true');
+        navigate('/dashboard');
+      } else {
+        sessionStorage.setItem('aayam_attempted_email', inputEmail);
+        navigate('/access-restricted');
+      }
+    } catch {
+      setIsSubmitting(false);
+      sessionStorage.setItem('aayam_attempted_email', inputEmail);
+      navigate('/access-restricted');
+    }
   };
 
   return (
@@ -580,6 +616,14 @@ const DevFallbackCard: React.FC = () => {
       <p className="text-xs sm:text-[13px] text-slate-400 mt-1 font-normal leading-relaxed">
         Sign in to continue to the AAYAM Authority Portal.
       </p>
+
+      {/* Error Alert Display */}
+      {error && (
+        <div className="mt-4 p-3 rounded-xl bg-red-950/40 border border-red-500/30 text-red-300 text-xs font-mono flex items-start gap-2 animate-fadeIn">
+          <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+          <span className="leading-snug">{error}</span>
+        </div>
+      )}
 
       {/* Login Form */}
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">

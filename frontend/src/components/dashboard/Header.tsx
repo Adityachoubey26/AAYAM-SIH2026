@@ -3,6 +3,7 @@ import { Menu, Search, Bell, MapPin, ChevronDown, CheckCircle2, LogOut } from 'l
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useUser, UserButton } from '@clerk/clerk-react';
 import { ENV } from '../../config/env';
+import { authorityService } from '../../services/authorityService';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -240,8 +241,17 @@ const clerkKey =
  */
 const ClerkUserProfileControl: React.FC = () => {
   const { user, isLoaded } = useUser();
-  const displayName = isLoaded && user ? (user.fullName || user.firstName || 'Command Officer') : 'Command Officer';
-  const role = isLoaded && user?.primaryEmailAddress?.emailAddress ? user.primaryEmailAddress.emailAddress : 'SDMA Clearance L-4';
+  const authorityProfile = authorityService.getActiveProfile();
+
+  const displayName =
+    authorityProfile?.fullName ||
+    (isLoaded && user ? user.fullName || user.firstName || 'Command Officer' : 'Command Officer');
+
+  const role =
+    authorityProfile?.jurisdiction ||
+    (isLoaded && user?.primaryEmailAddress?.emailAddress
+      ? user.primaryEmailAddress.emailAddress
+      : 'SDMA Clearance L-4');
 
   return (
     <div className="flex items-center gap-2.5 pl-2 border-l border-slate-800/80">
@@ -273,9 +283,15 @@ const ClerkUserProfileControl: React.FC = () => {
 const DevUserProfileControl: React.FC = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
+  const authorityProfile = authorityService.getActiveProfile();
+
+  const displayName = authorityProfile?.fullName || 'R. Sharma';
+  const displayRole = authorityProfile?.jurisdiction || 'State Authority (SEOC)';
 
   const handleSignOut = () => {
+    authorityService.clearProfile();
     localStorage.removeItem('aayam_auth_session');
+    sessionStorage.removeItem('aayam_attempted_email');
     navigate('/login');
   };
 
@@ -287,19 +303,22 @@ const DevUserProfileControl: React.FC = () => {
         aria-label="Officer profile and sign out menu"
       >
         <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-600 to-teal-400 p-0.5 flex items-center justify-center text-slate-950 font-bold text-xs shadow-md">
-          RS
+          {displayName.slice(0, 2).toUpperCase()}
         </div>
         <div className="hidden sm:block text-left">
-          <div className="text-xs font-bold text-white leading-tight">R. Sharma</div>
-          <div className="text-[10px] font-mono text-emerald-400 leading-tight">State Authority</div>
+          <div className="text-xs font-bold text-white leading-tight">{displayName}</div>
+          <div className="text-[10px] font-mono text-emerald-400 leading-tight">{displayRole}</div>
         </div>
       </button>
 
       {profileOpen && (
-        <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-[#090e15] border border-slate-800 shadow-2xl p-2 z-50 text-xs font-mono">
+        <div className="absolute right-0 mt-2 w-60 rounded-2xl bg-[#090e15] border border-slate-800 shadow-2xl p-2 z-50 text-xs font-mono">
           <div className="px-3 py-2 border-b border-slate-800/80">
-            <div className="font-bold text-white">R. Sharma</div>
-            <div className="text-[10px] text-slate-400">SDMA Officer // Clearance L-4</div>
+            <div className="font-bold text-white">{displayName}</div>
+            <div className="text-[10px] text-slate-400">{displayRole}</div>
+            {authorityProfile?.badgeNumber && (
+              <div className="text-[9px] text-emerald-400 mt-0.5">BADGE: {authorityProfile.badgeNumber}</div>
+            )}
           </div>
           <button
             onClick={handleSignOut}

@@ -1,5 +1,5 @@
 export const logger = {
-  info: (msg: string) => console.log(`[INFO]: ${msg}`),
-  warn: (msg: string) => console.warn(`[WARN]: ${msg}`),
-  error: (msg: string) => console.error(`[ERROR]: ${msg}`),
+  info: (msg: string, ...args: unknown[]) => console.log(`[INFO]: ${msg}`, ...args),
+  warn: (msg: string, ...args: unknown[]) => console.warn(`[WARN]: ${msg}`, ...args),
+  error: (msg: string, ...args: unknown[]) => console.error(`[ERROR]: ${msg}`, ...args),
 };
