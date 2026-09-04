@@ -6,7 +6,7 @@ export const GeospatialPreview: React.FC = () => {
   const [selectedLayer, setSelectedLayer] = useState<'all' | 'red' | 'safe'>('all');
 
   return (
-    <section id="geospatial" className="relative py-24 bg-[#06090d] border-t border-slate-800/60 overflow-hidden">
+    <section id="geospatial-preview" className="relative py-24 bg-[#06090d] border-t border-slate-800/60 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}

@@ -42,11 +42,14 @@ export const Footer: React.FC = () => {
             </div>
             <ul className="space-y-2 text-slate-400">
               <li><a href="#hero" className="hover:text-emerald-400 transition-colors">Home</a></li>
-              <li><a href="#about" className="hover:text-emerald-400 transition-colors">About AAYAM</a></li>
+              <li><a href="#problem" className="hover:text-emerald-400 transition-colors">The Problem</a></li>
+              <li><a href="#what-is-aayam" className="hover:text-emerald-400 transition-colors">What is AAYAM</a></li>
               <li><a href="#how-it-works" className="hover:text-emerald-400 transition-colors">How It Works</a></li>
-              <li><a href="#capabilities" className="hover:text-emerald-400 transition-colors">Capabilities</a></li>
-              <li><a href="#impact" className="hover:text-emerald-400 transition-colors">Operational Impact</a></li>
-              <li><a href="#team" className="hover:text-emerald-400 transition-colors">Team Philosophy</a></li>
+              <li><a href="#capabilities" className="hover:text-emerald-400 transition-colors">Core Capabilities</a></li>
+              <li><a href="#ai-intelligence" className="hover:text-emerald-400 transition-colors">AI Intelligence</a></li>
+              <li><a href="#geospatial-preview" className="hover:text-emerald-400 transition-colors">Risk Map Preview</a></li>
+              <li><a href="#impact" className="hover:text-emerald-400 transition-colors">Impact & Results</a></li>
+              <li><a href="#about" className="hover:text-emerald-400 transition-colors">About AAYAM</a></li>
             </ul>
           </div>
 

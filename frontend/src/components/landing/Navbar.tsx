@@ -17,11 +17,13 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { label: 'Home', href: '#hero' },
-    { label: 'About', href: '#about' },
+    { label: 'The Problem', href: '#problem' },
+    { label: 'What is AAYAM', href: '#what-is-aayam' },
     { label: 'How It Works', href: '#how-it-works' },
     { label: 'Capabilities', href: '#capabilities' },
+    { label: 'AI Intelligence', href: '#ai-intelligence' },
     { label: 'Impact', href: '#impact' },
-    { label: 'Team', href: '#team' },
+    { label: 'About', href: '#about' },
   ];
 
   return (

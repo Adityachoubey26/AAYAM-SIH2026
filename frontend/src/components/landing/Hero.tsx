@@ -67,10 +67,10 @@ export const Hero: React.FC = () => {
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <a
-                href="#capabilities"
+                href="#problem"
                 className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-sm tracking-wide shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/35 transition-all duration-200 transform hover:-translate-y-0.5"
               >
-                <span>Explore AAYAM</span>
+                <span>Understand The Problem</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
 

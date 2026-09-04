@@ -52,7 +52,7 @@ export const Impact: React.FC = () => {
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-[1.2]">
             Turning Intelligence <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200">
-              Into Defisive Action.
+              Into Decisive Action.
             </span>
           </h2>
 

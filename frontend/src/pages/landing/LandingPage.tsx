@@ -12,6 +12,8 @@ import AuthorityCTA from '../../components/landing/AuthorityCTA';
 import AboutSection from '../../components/landing/AboutSection';
 import Footer from '../../components/landing/Footer';
 
+import SectionConnector from '../../components/landing/SectionConnector';
+
 export const LandingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#06090d] text-slate-100 flex flex-col selection:bg-emerald-500/25 selection:text-emerald-300">
@@ -23,29 +25,47 @@ export const LandingPage: React.FC = () => {
         {/* Section 1: Hero */}
         <Hero />
 
+        <SectionConnector label="Threat Context" />
+
         {/* Section 2: The Problem */}
         <ProblemSection />
+
+        <SectionConnector label="The AAYAM Platform" />
 
         {/* Section 3: What is AAYAM (Pipeline) */}
         <WhatIsAayam />
 
-        {/* Section 4: Capabilities Grid */}
+        <SectionConnector label="Operational Workflow" />
+
+        {/* Section 4: How It Works */}
+        <HowItWorks />
+
+        <SectionConnector label="Core Capabilities" />
+
+        {/* Section 5: Capabilities Grid */}
         <Capabilities />
 
-        {/* Section 5: How It Works */}
-        <HowItWorks />
+        <SectionConnector label="Explainable AI" />
 
         {/* Section 6: AI Intelligence */}
         <AIIntelligence />
 
+        <SectionConnector label="Geospatial Command Map" />
+
         {/* Section 7: Geospatial Preview */}
         <GeospatialPreview />
+
+        <SectionConnector label="Measurable Impact" />
 
         {/* Section 8: Impact */}
         <Impact />
 
+        <SectionConnector label="Authority Access" />
+
         {/* Section 9: Authority Portal CTA */}
         <AuthorityCTA />
+
+        <SectionConnector label="Mission & Framework" />
 
         {/* Section 10: About AAYAM & SIH26191 Context */}
         <AboutSection />
