@@ -1,0 +1,21 @@
+{
+  "name": "aayam-sih2026",
+  "version": "0.1.0",
+  "private": true,
+  "description": "SIH26191 - Decision Support Platform for Hazard Red Zones, Carrying Capacity & Relocation",
+  "scripts": {
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "build:frontend": "npm run build --prefix frontend",
+    "build:backend": "npm run build --prefix backend"
+  },
+  "keywords": [
+    "sih2026",
+    "disaster-management",
+    "decision-support",
+    "carrying-capacity",
+    "relocation"
+  ],
+  "author": "Team AAYAM",
+  "license": "UNLICENSED"
+}
